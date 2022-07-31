@@ -8,11 +8,10 @@
     "files.insertFinalNewline": true,
     "editor.fontFamily": "'Cascadia Code', Consolas, monospace",
     "editor.fontSize": 13,
-    //"editor.fontLigatures": true,
     "editor.minimap.enabled": false,
     "editor.formatOnSave": true,
     "terminal.integrated.fontSize": 13,
     "json.format.enable": false,
     "typescript.disableAutomaticTypeAcquisition": true,
-    "cmake.configureOnOpen": true
+    "security.workspace.trust.enabled": false,
 }
