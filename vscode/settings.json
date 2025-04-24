@@ -1,17 +1,80 @@
 {
+    // ============================================================ //
     "window.restoreWindows": "none",
-    "workbench.colorTheme": "Default Light+",
-    "workbench.tree.renderIndentGuides": "always",
+    // ============================================================ //
+    "workbench.colorTheme": "Default Light Modern",
     "workbench.commandPalette.history": 0,
-    "files.trimTrailingWhitespace": true,
-    "files.trimFinalNewlines": true,
-    "files.insertFinalNewline": true,
-    "editor.fontFamily": "'Cascadia Code', Consolas, monospace",
-    "editor.fontSize": 13,
-    "editor.minimap.enabled": false,
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.startupEditor": "newUntitledFile",
+    "workbench.tree.renderIndentGuides": "always",
+    // ============================================================ //
+    "editor.fontFamily": "'Cascadia Mono', 'Microsoft YaHei'",
+    "editor.fontSize": 16,
     "editor.formatOnSave": true,
-    "terminal.integrated.fontSize": 13,
-    "json.format.enable": false,
-    "typescript.disableAutomaticTypeAcquisition": true,
+    "editor.inlayHints.enabled": "off",
+    "editor.semanticHighlighting.enabled": true,
+    // "editor.semanticTokenColorCustomizations": {
+    //     "rules": {
+    //         "variable": {
+    //             "fontStyle": ""
+    //         },
+    //         "function": {
+    //             "fontStyle": ""
+    //         },
+    //         "method": {
+    //             "fontStyle": ""
+    //         },
+    //         "class": {
+    //             "fontStyle": "bold underline"
+    //         },
+    //         "type": {
+    //             "fontStyle": "bold"
+    //         },
+    //         "enum": {
+    //             "fontStyle": "bold"
+    //         },
+    //         "enumMember": {
+    //             "fontStyle": "italic"
+    //         },
+    //         "typeParameter": {
+    //             "fontStyle": ""
+    //         }
+    //     }
+    // },
+    "editor.tabSize": 2,
+    // ============================================================ //
+    "files.eol": "\n",
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    // ============================================================ //
     "security.workspace.trust.enabled": false,
+    // ============================================================ //
+    "haskell.manageHLS": "PATH",
+    "haskell.plugin.semanticTokens.globalOn": true,
+    "haskell.formattingProvider": "ormolu",
+    // ============================================================ //
+    "cmake.configureOnOpen": false,
+    "cmake.useCMakePresets": "auto",
+    "cmake.pinnedCommands": [
+        "workbench.action.tasks.configureTaskRunner",
+        "workbench.action.tasks.runTask"
+    ],
+    // ============================================================ //
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "clangd.arguments": [
+        "--compile-commands-dir=${workspaceFolder}\\build",
+        "--all-scopes-completion",
+        "--background-index",
+        "--background-index-priority=low",
+        "--clang-tidy",
+        "--completion-style=detailed",
+        "--function-arg-placeholders",
+        "--header-insertion=never"
+    ],
+    // ============================================================ //
+    // "typescript.disableAutomaticTypeAcquisition": true,
+    // ============================================================ //
+    // "java.jdt.ls.java.home": "C:\\Programs\\jdk-21.0.4+7",
+    // "java.import.gradle.java.home": "C:\\Programs\\jdk-21.0.4+7",
 }
