@@ -10,24 +10,31 @@
       ./hardware-configuration.nix
     ];
 
-  nix.settings.substituters = [
-    "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
-    "https://cache.iog.io" # haskell.nix
-  ];
-  nix.settings.trusted-public-keys = [
-    "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=" # haskell.nix
-  ];
+  nix.settings = {
+    experimental-features = [ "nix-command" "flakes" ];
+    substituters = [
+      "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
+    ];
+  };
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot = {
+    loader.systemd-boot = {
+      enable = true;
+      edk2-uefi-shell.enable = true;
+    };
+    kernelParams = [
+      "video=Virtual-1:1920x1080"
+    ];
+  };
+  boot.loader.efi.canTouchEfiVariables = true;  # Wiki: https://nixos.wiki/wiki/Bootloader 
 
   virtualisation.hypervGuest.enable = true;
-  virtualisation.hypervGuest.videoMode = "1920x1080";
+  # virtualisation.hypervGuest.videoMode = "1920x1080";  # PR: https://github.com/NixOS/nixpkgs/pull/372743
 
   time.timeZone = "Asia/Shanghai";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  # networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "nixos-vm";
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
   networking.interfaces.eth0.ipv4.addresses = [{
@@ -39,12 +46,14 @@
     interface = "eth0";
   };
   networking.nameservers = [ "223.5.5.5" "119.29.29.29" ];
+  # networking.proxy.default = "http://10.43.96.1:10809";
 
-  services.openssh.enable = true;
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = false;
+    };
+  };
 
   # console = {
   #   font = "Lat2-Terminus16";
@@ -71,10 +80,15 @@
   # };
 
   users.mutableUsers = false;
-  users.users.root.hashedPassword = "$6$0EVx1k/DSPJAG2sU$Ep3MBAdBaR5g0gR5HGID5hxQWO0CoaXILF3k00BRztmwteXXkaSrZBSyrvrQLxsV/BJNv7ya9aGt5tlGbYY9T0";
+  users.users.root = {
+    hashedPassword = "$6$0EVx1k/DSPJAG2sU$Ep3MBAdBaR5g0gR5HGID5hxQWO0CoaXILF3k00BRztmwteXXkaSrZBSyrvrQLxsV/BJNv7ya9aGt5tlGbYY9T0";
+    openssh.authorizedKeys.keys = [
+      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDH2IsQpivVqN77IOREN6dOPSWsICz8t+WsQ/r9zVmhjKuI5ghf7/n4M4UuXeu/29/8N2/v3GQOAUog5SsgIEoEiip5JQgYy6fM9Oy2FF7Adx4Wm+EBpit0WBER4Ve/l6cJjkwEwzv/TX+by9x8VcGWucXvU44TMgJlvyy2mzYIbCYo1pwEpjSMoLFy9ef9lwrzhUW5uuN0P3sTN714R4fose6LAzqM/OZQg+XCU+ow+V8deYbVb9vnFGZ1Gi5bG+yoTSfGIiyPx0XZm2CuGMigwQjiew88APmruwQnLomHaSTCWYeCU9kM0xj77X/a8SpP+y6gqH0Nqmv+zuKkQODCKMalsApbNpN38/PE6hToQLGVB6RtiehwvY+E9CGBFR04onddg+Pbgy9U9bQjgpS7rqE1c1Cz3SKCFypOyUCm79RBkpOUJukvxUVitDIrOMmSb5nmLnYP9p2QafesTMWCrsXj/yKrqaiAvztsIc5rxa9p8Xg36jLTu0xrOIIavLM= noele@DESKTOP-2BKL0DD"
+    ];
+  };
   users.users.noelemahcz = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" ];
     hashedPassword = "$6$50R828YktSCW/AHj$45wWtB..mRsPYN1pS0w0Uh.2BldZ0S1iRfIOawu4jDBjQRJp3sC.Zx/urk4dwbUhcvPwUqQTmTE.x84EN39nu/";
     openssh.authorizedKeys.keys = [
       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDH2IsQpivVqN77IOREN6dOPSWsICz8t+WsQ/r9zVmhjKuI5ghf7/n4M4UuXeu/29/8N2/v3GQOAUog5SsgIEoEiip5JQgYy6fM9Oy2FF7Adx4Wm+EBpit0WBER4Ve/l6cJjkwEwzv/TX+by9x8VcGWucXvU44TMgJlvyy2mzYIbCYo1pwEpjSMoLFy9ef9lwrzhUW5uuN0P3sTN714R4fose6LAzqM/OZQg+XCU+ow+V8deYbVb9vnFGZ1Gi5bG+yoTSfGIiyPx0XZm2CuGMigwQjiew88APmruwQnLomHaSTCWYeCU9kM0xj77X/a8SpP+y6gqH0Nqmv+zuKkQODCKMalsApbNpN38/PE6hToQLGVB6RtiehwvY+E9CGBFR04onddg+Pbgy9U9bQjgpS7rqE1c1Cz3SKCFypOyUCm79RBkpOUJukvxUVitDIrOMmSb5nmLnYP9p2QafesTMWCrsXj/yKrqaiAvztsIc5rxa9p8Xg36jLTu0xrOIIavLM= noele@DESKTOP-2BKL0DD"
@@ -83,10 +97,8 @@
 
   environment.systemPackages = with pkgs; [
     curl
-    wget
-    vim
-    lf
     git
+    lf
   ];
 
   environment.etc = {
@@ -97,11 +109,17 @@
     };
   };
 
+  programs.vim.enable = true;
   programs.vim.defaultEditor = true;
 
+  programs.hyprland.enable = true;
+
   environment.shellAliases = {
-    ll = "ls -lhF --color=auto";
+    sudo = "sudo ";
+    ls = "ls -F --color=auto";
+    ll = "ls -lh";
     la = "ll -A";
+    nixosconf = "vim /etc/nixos/configuration.nix";
   };
 
   # Open ports in the firewall.
